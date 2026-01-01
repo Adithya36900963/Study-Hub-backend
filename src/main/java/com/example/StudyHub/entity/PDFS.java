@@ -2,6 +2,9 @@ package com.example.StudyHub.entity;
 
 import java.util.List;
 
+import org.hibernate.annotations.CollectionId;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,8 +38,10 @@ public class PDFS {
     @Column(name="pdfs_id")
     private Long id;
 
-    @OneToMany
-    @JoinColumn(name="pdfs_id", nullable=false)
+   @OneToMany(
+    mappedBy = "pDFS",   // ✅ MUST MATCH CHILD FIELD NAME
+    cascade = CascadeType.ALL
+)
     private List<PDF> pdfs;
 }
 
