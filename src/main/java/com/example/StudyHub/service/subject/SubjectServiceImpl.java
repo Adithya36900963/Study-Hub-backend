@@ -1,5 +1,7 @@
 package com.example.StudyHub.service.subject;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.example.StudyHub.entity.Subject;
@@ -23,5 +25,12 @@ public class SubjectServiceImpl implements SubjectServiceLayer {
     @Override
     public Subject getSubjectByName(String name) {
         return subjectRepository.findByName(name);
+    }
+
+    @Override
+    public Subject getById(Long id) {
+        // TODO Auto-generated method stub
+        return subjectRepository.findById(id).orElse(null);
+        
     }
 }

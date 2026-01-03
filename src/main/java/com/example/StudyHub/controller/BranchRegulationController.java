@@ -2,6 +2,7 @@ package com.example.StudyHub.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import com.example.StudyHub.service.regulation.RegulationServiceLayer;
 
 @RestController
 @RequestMapping("/api/branches")
+@CrossOrigin(origins = "http://localhost:3000")
 public class BranchRegulationController {
     
     private BranchServiceLayer branchServiceLayer;
@@ -43,7 +45,7 @@ public class BranchRegulationController {
     }
 
     @PostMapping("/{regulationId}")
-    public BranchRegulation createBranchRegulation(@PathVariable("regulationId") Long regulationId, @RequestBody Branch branch)
+    public Branch createBranchRegulation(@PathVariable("regulationId") Long regulationId, @RequestBody Branch branch)
     {
         //Getting Regulation from Regulation Id
         Regulation regulation=regulationServiceLayer.getRegulationById(regulationId);
@@ -66,7 +68,7 @@ public class BranchRegulationController {
             br.setRegulation(regulation);
             branchRegulation=regulationBranchServiceLayer.createBranchRegulation(br);
         }
-
-        return branchRegulation;
+        
+        return existingBranch;
     }
 }

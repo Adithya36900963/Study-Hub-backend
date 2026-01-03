@@ -1,28 +1,42 @@
 package com.example.StudyHub.service.pDFSRegulationSubject;
 
+import com.example.StudyHub.entity.PDFS;
+import com.example.StudyHub.entity.PDFSRegulationSubject;
+import com.example.StudyHub.repository.PDFSRegulationSubjectRepository;
+import com.example.StudyHub.service.regulation.RegulationServiceLayer;
+import com.example.StudyHub.service.subject.SubjectServiceLayer;
+
 import org.springframework.stereotype.Service;
 
-import com.example.StudyHub.entity.PDFS;
-
-import com.example.StudyHub.repository.PDFSRegulationSubjectRepository;
-
 @Service
-public class PDFSRegulationSubjectServiceImpl implements PDFSRegulationSubjectsServiceLayer{
+public class PDFSRegulationSubjectServiceImpl implements  PDFSRegulationSubjectsServiceLayer{
 
-    private PDFSRegulationSubjectRepository pdfsRSR;
+    private final PDFSRegulationSubjectRepository repo;
+    private SubjectServiceLayer subjectServiceLayer;
+    private RegulationServiceLayer regulationServiceLayer;
 
-    //Creating a Bean for PDFSRegulationSubjectRepository
-    PDFSRegulationSubjectServiceImpl(PDFSRegulationSubjectRepository pdfRSR)
-    {
-        this.pdfsRSR=pdfRSR;
+    public PDFSRegulationSubjectServiceImpl(PDFSRegulationSubjectRepository repo,
+        RegulationServiceLayer regulationServiceLayer,
+        SubjectServiceLayer subjectServiceLayer) {
+        this.repo = repo;
+        this.regulationServiceLayer=regulationServiceLayer;
+        this.subjectServiceLayer =subjectServiceLayer;
     }
 
-    //Is PDFS exist in PDFSREgulationSubject table 
-    @Override
     public PDFS isExist(Long regulationId, Long subjectId) {
-        return pdfsRSR.isExist(regulationId,subjectId);
+        PDFSRegulationSubject rs =
+                repo.findByRegulationIdAndSubjectId(regulationId, subjectId);
+        return rs != null ? rs.getPdfs() : null;
     }
 
-   
+    @Override
+    public PDFSRegulationSubject create(Long regulationId, Long subjectId,PDFS pdfs) {
+
+        PDFSRegulationSubject pdfrs=new PDFSRegulationSubject();
+        pdfrs.setPdfs(pdfs);
+        pdfrs.setRegulation(regulationServiceLayer.getRegulationById(regulationId));
+        pdfrs.setSubject(subjectServiceLayer.getById(subjectId));
     
+        return repo.save(pdfrs);
+    }
 }

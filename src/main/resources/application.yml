@@ -2,6 +2,12 @@ server:
   port: 8080
 
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
   datasource:
     url: jdbc:oracle:thin:@localhost:1522/XEPDB1
     username: COLLAGE
@@ -12,4 +18,3 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    dd;l-auto: update

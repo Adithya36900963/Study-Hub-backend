@@ -1,33 +1,23 @@
 package com.example.StudyHub.service.pdfs;
 
+import com.example.StudyHub.entity.PDFS;
+import com.example.StudyHub.repository.PDFSRepository;
 import org.springframework.stereotype.Service;
 
-import com.example.StudyHub.entity.PDFS;
-
-import com.example.StudyHub.repository.PDFSRepository;
-
-
 @Service
-public class PDFSServiceImpl implements PDFSServiceLayer {
+public class PDFSServiceImpl implements PDFSServiceLayer{
 
-    private PDFSRepository pdfsRepository;
-    
-    //Creation of Bean
-    public PDFSServiceImpl(PDFSRepository pdfsRepository)
-    {
-        this.pdfsRepository=pdfsRepository;
+    private final PDFSRepository repo;
+
+    public PDFSServiceImpl(PDFSRepository repo) {
+        this.repo = repo;
     }
 
-    //Creation pdfs IN table
-    @Override
     public PDFS create() {
-        return pdfsRepository.save(new PDFS());
+        return repo.save(new PDFS());
     }
 
-    @Override
-    public PDFS save(PDFS pDFS) {
-        
-        return pdfsRepository.save(pDFS);
+    public PDFS save(PDFS pdfs) {
+        return repo.save(pdfs);
     }
-   
 }

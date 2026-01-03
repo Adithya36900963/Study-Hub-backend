@@ -2,7 +2,7 @@ package com.example.StudyHub.controller;
 
 import java.util.List;
 
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +18,7 @@ import com.example.StudyHub.service.semester.SemesterServiceLayer;
 import com.example.StudyHub.service.subject.SubjectServiceLayer;
 import com.example.StudyHub.service.subjectRegulationBranchSemester.SubjectRegulationBranchSemesterServiceLayer;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/subjects")
 public class SubjectController {
@@ -43,7 +44,7 @@ public class SubjectController {
 
     //Creating subject along with srbs mapping
     @PostMapping("/{regulationId}/{branchId}/{semesterId}")
-    public SubjectRegulationBranchSemester createSubject(@PathVariable("regulationId") Long regulationId,
+    public Subject createSubject(@PathVariable("regulationId") Long regulationId,
                                 @PathVariable("branchId") Long branchId,
                                 @PathVariable("semesterId") Long semesterId,
                                 @RequestBody Subject subject) {
@@ -62,7 +63,8 @@ public class SubjectController {
             srbs.setSubject(existingSubject);
             srbs=srbsServiceLayer.createSRBS(srbs);
         }
-        return srbs;
+        
+        return existingSubject;
     }
 
     //Getting subjects along with srbs mapping

@@ -1,25 +1,23 @@
 package com.example.StudyHub.service.pdf;
 
+import com.example.StudyHub.entity.PDF;
+import com.example.StudyHub.repository.PDFRepository;
 import org.springframework.stereotype.Service;
 
-import com.example.StudyHub.entity.PDF;
-import com.example.StudyHub.repository.PDFRepoitory;
-
 @Service
-public class PDFServiceImpl implements PDFServiceLayer {
+public class PDFServiceImpl implements PDFServiceLayer{
 
-    private PDFRepoitory pdfRepoitory;
+    private final PDFRepository repo;
 
-    //Bean configuration
-    PDFServiceImpl(PDFRepoitory pdfRepoitory)
-    {
-        this.pdfRepoitory=pdfRepoitory;
+    public PDFServiceImpl(PDFRepository repo) {
+        this.repo = repo;
     }
 
-    @Override
-    public PDF save(PDF pdf) {
-        
-        return pdfRepoitory.save(pdf);
+    public byte[] getPdfData(Long id) {
+        return repo.findPdfData(id);
     }
-    
+
+    public PDF isExist(Long id) {
+        return repo.findById(id).orElse(null);
+    }
 }

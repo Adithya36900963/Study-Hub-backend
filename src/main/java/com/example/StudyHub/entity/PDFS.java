@@ -1,30 +1,18 @@
 package com.example.StudyHub.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.List;
-
-import org.hibernate.annotations.CollectionId;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class PDFS {
-    
+
     @Id
     @SequenceGenerator(
         name = "pdfs_seq",
@@ -35,13 +23,15 @@ public class PDFS {
         strategy = GenerationType.SEQUENCE,
         generator = "pdfs_seq"
     )
-    @Column(name="pdfs_id")
+    @Column(name = "pdfs_id")
     private Long id;
 
-   @OneToMany(
-    mappedBy = "pDFS",   // ✅ MUST MATCH CHILD FIELD NAME
-    cascade = CascadeType.ALL
-)
+    @OneToMany(
+        mappedBy = "pDFS",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true,
+        fetch = FetchType.LAZY
+    )
+    @JsonManagedReference
     private List<PDF> pdfs;
 }
-

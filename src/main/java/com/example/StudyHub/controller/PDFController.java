@@ -1,88 +1,100 @@
 package com.example.StudyHub.controller;
 
-import java.util.List;
-
-import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.StudyHub.entity.PDF;
 import com.example.StudyHub.entity.PDFS;
-
-import com.example.StudyHub.service.pDFSRegulationSubject.PDFSRegulationSubjectsServiceLayer;
+import com.example.StudyHub.entity.PDFSRegulationSubject;
+import com.example.StudyHub.model.PDFModel;
+import com.example.StudyHub.repository.PDFRepository;
 import com.example.StudyHub.service.pdf.PDFServiceLayer;
 import com.example.StudyHub.service.pdfs.PDFSServiceLayer;
+import com.example.StudyHub.service.pDFSRegulationSubject.PDFSRegulationSubjectsServiceLayer;
+import org.springframework.http.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.persistence.Lob;
+import java.util.ArrayList;
+import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/pdfs")
 public class PDFController {
-    
-    private PDFServiceLayer pdfServiceLayer;
-    private PDFSServiceLayer pdfsServiceLayer;
-    private PDFSRegulationSubjectsServiceLayer pdfsrsl;
 
-    //Bean Configuration
-    public PDFController(PDFServiceLayer pdfServiceLayer,
-        PDFSServiceLayer pdfsServiceLayer,
-        PDFSRegulationSubjectsServiceLayer pdfsrsl)
-    {
-        this.pdfServiceLayer=pdfServiceLayer;
-        this.pdfsServiceLayer=pdfsServiceLayer;
-        this.pdfsrsl=pdfsrsl;
+    private final PDFServiceLayer pdfService;
+    private final PDFSServiceLayer pdfsService;
+    private final PDFSRegulationSubjectsServiceLayer mapService;
+    private final PDFRepository pdfRepo;
+
+    public PDFController(
+            PDFServiceLayer pdfService,
+            PDFSServiceLayer pdfsService,
+            PDFSRegulationSubjectsServiceLayer mapService,
+            PDFRepository pdfRepo) {
+        this.pdfService = pdfService;
+        this.pdfsService = pdfsService;
+        this.mapService = mapService;
+        this.pdfRepo = pdfRepo;
     }
 
+    // ✅ UPLOAD
+    @Transactional
+    @PostMapping(value = "/{regulationId}/{subjectId}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public PDFModel upload(
+            @PathVariable Long regulationId,
+            @PathVariable Long subjectId,
+            @RequestParam String name,
+            @RequestParam MultipartFile pdf) throws Exception {
+
+        PDFS pdfs = mapService.isExist(regulationId, subjectId);
+        if (pdfs == null)
+        {
+            pdfs = pdfsService.create();
+            
+            mapService.create(regulationId,subjectId,pdfs);
+            
+        }
+
+        if (pdfs.getPdfs() == null)
+            pdfs.setPdfs(new ArrayList<>());
+
+        PDF entity = new PDF();
+        entity.setName(name);
+        entity.setData(pdf.getBytes());
+        entity.setPDFS(pdfs);
+
+        pdfs.getPdfs().add(entity);
+        pdfsService.save(pdfs);
+        
+        return new PDFModel(entity.getId(), entity.getName());
+    }
+
+
+   
+
+    // ✅ LIST
     @GetMapping("/{regulationId}/{subjectId}")
-    public List<String> getPDFNames(
+    public List<PDFModel> list(
             @PathVariable Long regulationId,
             @PathVariable Long subjectId) {
 
-        PDFS rs = pdfsrsl.isExist(regulationId, subjectId);
+        PDFS pdfs = mapService.isExist(regulationId, subjectId);
+        if (pdfs == null) return List.of();
 
-        if (rs == null || rs.getPdfs() == null) {
-            return List.of(); // ✅ []
-        }
-
-        return rs.getPdfs()
-                .stream()
-                .map(PDF::getName)   // or getTitle(), getFileName()
-                .toList();
+        return pdfRepo.findPDFNames(pdfs.getId());
     }
 
+    // ✅ DOWNLOAD
+    @GetMapping("/download/{id}")
+    public ResponseEntity<byte[]> download(@PathVariable Long id) {
 
-    @GetMapping("/{regulationId}/{subjectId}/{pdfId}")
-public ResponseEntity<byte[]> getPDF(
-        @PathVariable Long regulationId,
-        @PathVariable Long subjectId,
-        @PathVariable Long pdfId) {
+        byte[] data = pdfService.getPdfData(id);
+        if (data == null) return ResponseEntity.notFound().build();
 
-    PDFS rs = pdfsrsl.isExist(regulationId, subjectId);
-
-    if (rs == null) {
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/pdf")
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"file.pdf\"")
+                .body(data);
     }
-
-    PDF pdf = rs.getPdfs()
-                .stream()
-                .filter(p -> p.getId().equals(pdfId))
-                .findFirst()
-                .orElse(null);
-
-    if (pdf == null) {
-        return ResponseEntity.notFound().build();
-    }
-
-    return ResponseEntity.ok()
-            .header("Content-Type", "application/pdf")
-            .header("Content-Disposition",
-                    "inline; filename=\"" + pdf.getName() + "\"")
-            .body(pdf.getData()); // byte[]
-}
-
 }
