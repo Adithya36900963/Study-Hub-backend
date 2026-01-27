@@ -1,10 +1,18 @@
 package com.example.StudyHub.service.pdf;
 
-import com.example.StudyHub.entity.PDF;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.StudyHub.model.PDFModel;
 
 public interface PDFServiceLayer {
-   byte[] getPdfData(Long id);
 
-   PDF isExist(Long id);
+   PDFModel createPDFSAndPDF(Long subjectId, String name, MultipartFile pdf) throws Exception;
+
+   List<PDFModel> getPDFModel(Long subjectId);
+
+   ResponseEntity<byte[]> downloadPDF(Long id);
 
 }

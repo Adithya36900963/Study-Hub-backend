@@ -17,7 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Branch {
-
+  
     @Id
     @SequenceGenerator(
     name = "regulation_seq",
@@ -30,6 +30,9 @@ public class Branch {
     )
     @Column(name="branch_id")
     private Long id;
+
+    @Column(name="branch_code")
+    private String code;
     
     @Column(name="branch_name")
     private String name;

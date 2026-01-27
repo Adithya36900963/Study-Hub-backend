@@ -27,7 +27,7 @@ public class Regulation {
     )
     @GeneratedValue(
     strategy = GenerationType.SEQUENCE,
-    generator = "regulation_seq"
+    generator = "regulation_seq" 
     )
     private Long id;
     

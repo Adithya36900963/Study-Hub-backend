@@ -9,12 +9,19 @@ spring:
       max-request-size: 20MB
 
   datasource:
-    url: jdbc:oracle:thin:@localhost:1522/XEPDB1
-    username: COLLAGE
-    password: Rupa
-    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:postgresql://db.rkcrfzogbnxerztncnxy.supabase.co:5432/postgres?sslmode=require
+    username: postgres
+    password: AdiRupa@369@
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret: mysupersecretkeymysupersecretkeymysupersecretkey
+  expirationMs: 86400000

@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder 
 public class PDF {
 
     @Id
@@ -28,7 +29,7 @@ public class PDF {
     private String name;
 
     @Lob
-    @Column(name = "pdf_data", columnDefinition = "BLOB")
+    @Column(name = "pdf_data")
     private byte[] data;
 
     @ManyToOne(fetch = FetchType.LAZY)

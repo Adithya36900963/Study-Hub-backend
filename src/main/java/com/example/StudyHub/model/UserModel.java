@@ -8,10 +8,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class PDFModel {
-    private Long id;
+public class UserModel {
     private String name;
+    private String password;
+
 }

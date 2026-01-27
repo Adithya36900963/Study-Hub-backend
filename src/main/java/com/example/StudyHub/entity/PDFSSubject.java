@@ -8,12 +8,13 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(
     uniqueConstraints = {
         @UniqueConstraint(columnNames = {"pdfs_id","subject_id","regulation_id"})
     }
 )
-public class PDFSRegulationSubject {
+public class PDFSSubject {
 
     @Id
     @SequenceGenerator(
@@ -31,11 +32,9 @@ public class PDFSRegulationSubject {
     @JoinColumn(name = "pdfs_id", nullable = false)
     private PDFS pdfs;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "regulation_id", nullable = false)
-    private Regulation regulation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @OneToOne
     @JoinColumn(name = "subject_id", nullable = false)
     private Subject subject;
 }

@@ -8,10 +8,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class PDFModel {
-    private Long id;
-    private String name;
+public class LoginResponse {
+    private String token;
+    
 }
