@@ -11,7 +11,7 @@ spring:
   datasource:
     url: jdbc:postgresql://db.rkcrfzogbnxerztncnxy.supabase.co:5432/postgres?sslmode=require
     username: postgres
-    password: AdiRupa@369@
+    password: "Akhiaishu@07"
     driver-class-name: org.postgresql.Driver
 
   jpa:
