@@ -21,6 +21,28 @@ public class UserServiceImpl implements UserServiceLayer {
         this.pe=pe;
     }
     
+    public void customPasswordValidator(String pass)
+    {
+        int len=8;
+        int upperCase=0;
+        int lowerCase=0;
+        int digit=0;
+        int specialChar=0;
+        if(pass.length()<len)
+            throw new RuntimeException("Password must be at least "+len+" characters long");
+        for(char c: pass.toCharArray())
+        {
+            if(Character.isUpperCase(c))
+                upperCase++;
+            else if(Character.isLowerCase(c))
+                lowerCase++;
+            else if(Character.isDigit(c))
+                digit++;
+            else
+                specialChar++;
+            
+        }
+    }
     @Override
     public User createUser(User user) {
          if(user.getName()==null && user.getPassword()==null)
@@ -29,7 +51,10 @@ public class UserServiceImpl implements UserServiceLayer {
         if(user.getName()==null)
             throw new RuntimeException("User Name  isn't given");
 
-        if(user.getPassword()==null)
+
+        String password=user.getPassword();
+        
+        if(password==null || "".equals(password))
             throw new RuntimeException("User Password isn't given");
 
         if(ur.findByName(user.getName())!=null)
@@ -37,7 +62,7 @@ public class UserServiceImpl implements UserServiceLayer {
         
         User newUser=User.builder()
                         .name(user.getName())
-                        .password(pe.encode(user.getPassword()))
+                        .password(pe.encode(password))
                         .role(User.Role.SUPERVISOR)
                         .build();
         return ur.save(newUser);
