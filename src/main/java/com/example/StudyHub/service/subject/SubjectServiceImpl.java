@@ -119,8 +119,11 @@ public class SubjectServiceImpl implements SubjectServiceLayer {
          //Checking does Semester exist in Semester Id
         Semester existingSemester=sr.findById(semesterId).orElseThrow(()->
         new RuntimeException("Semester deosn't exist on Semester Id: "+semesterId));
+        List<Subject> subjects=srbsr.findSubjectsByRegulationBranchSemester(regulationId, branchId, semesterId);
+        if(subjects==null)
+            return List.of();
 
-        return srbsr.findSubjectsByRegulationBranchSemester(regulationId, branchId, semesterId);
+        return subjects;
     }
 
 

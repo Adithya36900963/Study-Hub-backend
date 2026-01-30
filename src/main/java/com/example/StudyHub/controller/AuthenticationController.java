@@ -65,7 +65,7 @@ public ResponseEntity<?> login(@RequestBody UserModel req,HttpServletResponse re
     }
 }
 
-    @GetMapping("/auth/logout")
+    @GetMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse res)
     {
         Cookie cookie = new Cookie("jwt", null);
@@ -75,7 +75,7 @@ public ResponseEntity<?> login(@RequestBody UserModel req,HttpServletResponse re
         cookie.setMaxAge(0);   
 
         res.addCookie(cookie);
-        return ResponseEntity.ok(Map.of("message", "Logoutsuccessful"));
+        return ResponseEntity.ok(Map.of("message", "Logout Successful"));
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.StudyHub.controller;
 
 
-import com.example.StudyHub.entity.Subject;
 import com.example.StudyHub.model.PDFModel;
 import com.example.StudyHub.model.ResponseModel;
 import com.example.StudyHub.service.pdf.PDFServiceLayer;

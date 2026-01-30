@@ -29,13 +29,22 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath();
-        return path.startsWith("/auth/")
-                || path.startsWith("/public/")
-                || path.equals("/")
-                || path.equals("/home");
-    }
+protected boolean shouldNotFilter(HttpServletRequest request) {
+    String path = request.getServletPath();
+
+    // Skip JWT filter for auth endpoints and public GET APIs
+    return path.startsWith("/auth/")             // authentication endpoints
+            || path.startsWith("/public/")       // optional public folder
+            || path.equals("/") || path.equals("/home") // home pages
+            || (request.getMethod().equals("GET") && (
+                path.startsWith("/api/regulations/") ||
+                path.startsWith("/api/branches/") ||
+                path.startsWith("/api/semesters/") ||
+                path.startsWith("/api/subjects/") ||
+                path.startsWith("/api/pdfs/")
+            ));
+}
+
 
     @Override
 protected void doFilterInternal(HttpServletRequest request,
