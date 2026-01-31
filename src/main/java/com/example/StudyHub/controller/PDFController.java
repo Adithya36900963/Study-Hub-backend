@@ -52,7 +52,8 @@ public class PDFController {
     public ResponseEntity<Map<String,Object>> list(
             @PathVariable Long subjectId) {
 
-        ResponseModel<List<PDFModel>> res=new ResponseModel<>(200, "Fetched sucessflly",pdfService.getPDFModel(subjectId));
+        List<PDFModel> pdfs=pdfService.getPDFModel(subjectId);
+        ResponseModel<List<PDFModel>> res=new ResponseModel<>(200, "Fetched sucessflly",pdfs);
         return res.res();
     }
 
