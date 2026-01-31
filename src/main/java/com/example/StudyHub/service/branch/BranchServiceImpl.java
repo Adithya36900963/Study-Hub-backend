@@ -67,8 +67,7 @@ public class BranchServiceImpl implements BranchServiceLayer {
         List<Branch> branches =brr.findBranchesByRegulationId(regulationId);
         if(branches.isEmpty())
         {
-            throw new RuntimeException
-            ("Branches isn't exist based on Regulation Id: "+regulationId);
+            return List.of(); 
         }
         return branches;
     }

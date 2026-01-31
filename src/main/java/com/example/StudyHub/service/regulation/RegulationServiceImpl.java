@@ -51,8 +51,7 @@ public class RegulationServiceImpl implements RegulationServiceLayer {
         List<Regulation> regulations=rr.findAll();
         if(regulations.isEmpty())
         {
-            throw new RuntimeException
-            ("Regulations list is null");
+            return List.of(); 
         }
         return regulations;
     }

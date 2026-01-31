@@ -37,8 +37,8 @@ http.authorizeHttpRequests(auth -> auth
     .requestMatchers("/api/users/**").hasRole("ADMIN")
 
     // public GET APIs (after restricted ones)
-    .requestMatchers(HttpMethod.GET, "/api/regulations/","/api/branches/","/api/regulations/",
-        "api/subjects/","/api/pdfs/"
+    .requestMatchers(HttpMethod.GET, "/api/regulations/**","/api/branches/**",
+        "/api/semesters/**","/api/subjects/**","/api/pdfs/**"
     ).permitAll()
 
     // everything else

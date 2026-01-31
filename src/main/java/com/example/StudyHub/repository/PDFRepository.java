@@ -20,5 +20,7 @@ public interface PDFRepository extends JpaRepository<PDF, Long> {
 
     @Query("SELECT p.data FROM PDF p WHERE p.id = :id")
     byte[] findPdfData(@Param("id") Long id);
+
+    
 }
  
