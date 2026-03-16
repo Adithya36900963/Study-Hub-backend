@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+  datasource:
+    url: jdbc:postgresql://db.rkcrfzogbnxerztncnxy.supabase.co:5432/postgres
+    username: postgres
+    password: AdiRupa@369@
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: mysupersecretkeymysupersecretkeymysupersecretkey
+  expirationMs: 86400000
