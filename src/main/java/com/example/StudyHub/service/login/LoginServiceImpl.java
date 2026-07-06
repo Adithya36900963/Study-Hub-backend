@@ -1,6 +1,10 @@
 package com.example.StudyHub.service.login;
 
 
+import java.time.Duration;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,13 +43,15 @@ public class LoginServiceImpl implements LoginService {
 
 
         String token = jwtUtil.generateToken(auth.getName());
-        Cookie cookie = new Cookie("jwt", token);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(false);      
-        cookie.setPath("/");          
-        cookie.setMaxAge(60 * 60);   
+        ResponseCookie cookie = ResponseCookie.from("jwt", token)
+        .httpOnly(true)
+        .secure(true)
+        .sameSite("None")
+        .path("/")
+        .maxAge(Duration.ofHours(1))
+        .build();
 
-        response.addCookie(cookie);
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         
         User user=ur.findByName(userModel.getName());
         
