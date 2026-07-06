@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,7 +20,6 @@ import com.example.StudyHub.service.branch.BranchServiceLayer;
  
 @RestController
 @RequestMapping("/api/branches")
-@CrossOrigin(origins = "http://localhost:3000")
 public class BranchController {
      
     
